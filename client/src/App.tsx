@@ -81,15 +81,38 @@ export default class App extends React.Component<Props, State> {
   renderTable() {
     return (
       <div>
-        {
-          this.state.PICTURE_ARRAY.map((item, index) => {
+        <table>
+          {this.state.PICTURE_ARRAY.map((item) => {
             return (
-              <td>
-                {item.PIXEL_OBJECT[index].id}
+              <tr>
+                {this.state.PICTURE_ARRAY.map((item, index) => {
+                  return (
+                    <th >
+                      {item.PIXEL_OBJECT[index].position.x},{item.PIXEL_OBJECT[index].position.y}
+                      {}
+                    </th>
+                  );
+                })}
+              </tr>
 
-              </td>
             );
           })}
+        </table>
+
+        <div>
+        </div>
+
+
+        {/* <div>
+          {this.state.PICTURE_ARRAY.map((item, index) => {
+            return (
+              <tr >
+                {item.PIXEL_OBJECT[index].position.x},{item.PIXEL_OBJECT[index].position.y}
+              </tr>
+            );
+          })}
+        </div> */}
+
       </div>
     )
   }
@@ -97,7 +120,7 @@ export default class App extends React.Component<Props, State> {
   render() {
     return (
       <div className="App">
-        {this.renderTable}
+        {this.renderTable()}
       </div>
     )
   }
