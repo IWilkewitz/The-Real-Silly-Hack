@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
-
+import RenderTable from './render-table'
 
 //object that holds the data for each pixel
 type PIXEL_OBJECT = {
   id: number,
+  index: number,
   color: string,
   isClicked: boolean,
   position: {
@@ -14,11 +15,13 @@ type PIXEL_OBJECT = {
 }
 
 type PICTURE_ARRAY = {
-  PIXEL_OBJECT: PIXEL_OBJECT[]
+  PIXEL_OBJECT: PIXEL_OBJECT[],
 }
 type Props = {}
 type State = {
   PICTURE_ARRAY: PICTURE_ARRAY[]
+  height: number;
+  width: number;
 }
 
 
@@ -27,48 +30,40 @@ export default class App extends React.Component<Props, State> {
     super(props);
     this.state = {
       PICTURE_ARRAY: [],
+      height: 10,
+      width: 10,
     }
   }
 
   //initialize pixel board
   init() {
 
-    //size of image 10 * 10 = 100 pixels
-    const PICTURE_SIZE = 10
+    const thisWidth = this.state.width;
+    const thisHeight = this.state.width;
+    const PICTURE_SIZE = thisWidth * thisHeight;
 
     let initArr: PICTURE_ARRAY[] = [];
 
     //push some initial data to our pixel objects
-    for (let i = 0; i < PICTURE_SIZE; i++) {
+    for (let i = 0, x = 0, y = 0; i < PICTURE_SIZE; i++, x++) {
+      if (x % thisWidth == 0 && i > 0) {
+        x = 0;
+        y += 1;
+      }
+
       initArr.push({
         PIXEL_OBJECT: [{
+          index: i,
           id: 1 + Math.random(),
           color: " ",
           isClicked: false,
           position: {
-            x: 0,
-            y: i,
+            x: x,
+            y: y,
           }
         }]
       })
     }
-
-    for (let i = 0; i < PICTURE_SIZE; i++) {
-      for (let j = 1; j < PICTURE_SIZE; j++) {
-        if (i == 0) { continue }
-        initArr[i].PIXEL_OBJECT.push({
-          id: 1 + Math.random(),
-          color: " ",
-          isClicked: false,
-          position: {
-            x: j,
-            y: i,
-          },
-        }
-        )
-      }
-    }
-
     this.setState({ PICTURE_ARRAY: initArr })
 
   }
@@ -78,50 +73,12 @@ export default class App extends React.Component<Props, State> {
     this.init();
   }
 
-  renderTable() {
-    return (
-      <div>
-        <table>
-          {this.state.PICTURE_ARRAY.map((item) => {
-            return (
-              <tr>
-                {this.state.PICTURE_ARRAY.map((item, index) => {
-                  return (
-                    <th >
-                      {item.PIXEL_OBJECT[index].position.x},{item.PIXEL_OBJECT[index].position.y}
-                      {}
-                    </th>
-                  );
-                })}
-              </tr>
-
-            );
-          })}
-        </table>
-
-        <div>
-        </div>
-
-
-        {/* <div>
-          {this.state.PICTURE_ARRAY.map((item, index) => {
-            return (
-              <tr >
-                {item.PIXEL_OBJECT[index].position.x},{item.PIXEL_OBJECT[index].position.y}
-              </tr>
-            );
-          })}
-        </div> */}
-
-      </div>
-    )
-  }
 
   render() {
     return (
       <div className="App">
-        {this.renderTable()}
-      </div>
+        <RenderTable data={this.state.PICTURE_ARRAY} />
+      </div >
     )
   }
 }
