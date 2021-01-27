@@ -77,7 +77,7 @@ export default class App extends React.Component<Props, State> {
   render() {
     return (
       <div className="App">
-        <RenderTable data={this.state.PICTURE_ARRAY} />
+        <RenderTable data={this.state.PICTURE_ARRAY} width={this.state.width} />
       </div >
     )
   }
